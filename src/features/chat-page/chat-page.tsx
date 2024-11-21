@@ -66,7 +66,7 @@ export const ChatPage: FC<ChatPageProps> = (props) => {
                 }}
                 profilePicture={
                   message.role === "assistant"
-                    ? "/logo-COMAU.png"
+                    ? "/ai-icon.png"
                     : session?.user?.image
                 }
                 theme={theme}
