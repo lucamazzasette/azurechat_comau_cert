@@ -78,9 +78,9 @@ export const ChatPage: FC<ChatPageProps> = (props) => {
           {loading === "loading" && <ChatLoading />}
         </ChatMessageContentArea>
       </ChatMessageContainer>
-      
+
       <div className="flex flex-col items-center mt-4">
-         <ChatInput />
+         <ChatInput/>
 
        <div className="mt-2 text-center text-sm">
         <Disclaimer text={<>COMAU AICO generated content may be inaccurate. <Link target="_blank" href="https://drive.google.com/file/d/1OXkt4Z9hVoy4rXGFBOhzR9e0LJers5fJ/view">Refered Policy</Link>.</>}/>

@@ -23,9 +23,9 @@ param openAISku string = 'S0'
 param openAIApiVersion string ='2024-08-01-preview'
 
 param chatGptDeploymentCapacity int = 30
-param chatGptDeploymentName string = 'gpt-4o'
-param chatGptModelName string = 'gpt-4o'
-param chatGptModelVersion string = '2024-05-13'
+param chatGptDeploymentName string = 'o3-mini'
+param chatGptModelName string = 'o3-mini'
+param chatGptModelVersion string = '2025-01-31'
 param embeddingDeploymentName string = 'embedding'
 param embeddingDeploymentCapacity int = 120
 param embeddingModelName string = 'text-embedding-ada-002'
