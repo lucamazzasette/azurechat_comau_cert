@@ -138,7 +138,24 @@ type NewsItem = {
             <ChatInput />
           </div>
            <div className="mt-2 text-center text-xs">
-        <Disclaimer text={<>COMAU AICO generated content may be inaccurate. <Link target="_blank" href="https://drive.google.com/file/d/1OXkt4Z9hVoy4rXGFBOhzR9e0LJers5fJ/view">Refered Policy</Link>. <br />AICO Model Last update  October 2023 </>}/>
+        <Disclaimer
+  text={
+    <>
+      COMAU AICO generated content may be inaccurate.{" "}
+      <span>
+        <Link
+          href="https://drive.google.com/file/d/1OXkt4Z9hVoy4rXGFBOhzR9e0LJers5fJ/view"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Refered Policy
+        </Link>
+      </span>
+      . <br />
+      AICO Model Last update October 2023
+    </>
+  }
+/>
         </div>
         </div>
       </div>
