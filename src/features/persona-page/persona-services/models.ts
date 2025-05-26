@@ -25,6 +25,15 @@ export const PersonaModelSchema = z.object({
     })
     .min(1)
     .refine(refineFromEmpty, "System message cannot be empty"),
+
+  // 🆕 Campo facoltativo per il messaggio iniziale (startMessage)
+  startMessage: z
+    .string({
+      invalid_type_error: "Invalid start message",
+    })
+    .optional()
+    .or(z.literal("").optional()),
+
   isPublished: z.boolean(),
   type: z.literal(PERSONA_ATTRIBUTE),
   createdAt: z.date(),
