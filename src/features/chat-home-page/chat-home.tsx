@@ -12,6 +12,7 @@ import { ChatLoading } from "@/features/ui/chat/chat-message-area/chat-loading";
 import Disclaimer from "@/features/ui/chat/disclaimer";
 import { FC, useEffect } from "react";
 import { NEW_CHAT_NAME } from "@/features/theme/theme-config";
+import Link from "next/link";
 
 interface ChatPersonaProps {
   personas: PersonaModel[];

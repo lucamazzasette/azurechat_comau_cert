@@ -13,6 +13,7 @@ import { PersonaModel } from "../persona-page/persona-services/models";
 import { PersonaCard } from "../persona-page/persona-card/persona-card";
 import { ExtensionCard } from "../extensions-page/extension-card/extension-card";
 import { ChatHeader } from "./chat-header/chat-header";
+import Link from "next/link";
 import {
   ChatDocumentModel,
   ChatMessageModel,
@@ -147,9 +148,9 @@ export const ChatPage: FC<ChatPageProps> = (props) => {
           <div className="w-full backdrop-blur rounded-xl ">
             <ChatInput formRef={formRef} />
           </div>
-           <div className="mt-2 text-center text-xs">
-        <Disclaimer text={<>COMAU AICO generated content may be inaccurate. <Link target="_blank" href="https://drive.google.com/file/d/1OXkt4Z9hVoy4rXGFBOhzR9e0LJers5fJ/view">Refered Policy</Link>. <br />AICO Model Last update  October 2023 </>}/>
-        </div>
+            <div className="mt-2 text-center text-xs">
+        <Disclaimer text={<>COMAU AICO generated content may be inaccurate. <Link target="_blank" href="https://drive.google.com/file/d/1OXkt4Z9hVoy4rXGFBOhzR9e0LJers5fJ/view">Refered Policy</Link>.<br />AICO Model Last update  October 2023</>}/>
+       </div>
         </div>
       </div>
     </main>
