@@ -63,7 +63,7 @@ type NewsItem = {
     {
       title: "PPT Translator",
       text: "This tool translates text within .docx and .pptx files while attempting to preserve formatting.",
-      link: "https://aico-doctrans-gbc3bah0aqf6hea0.westeurope-01.azurewebsites.net/"
+      link: "https://aicopt.comau.com"
     }
   ];
 
