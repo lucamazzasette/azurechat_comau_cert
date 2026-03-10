@@ -142,10 +142,11 @@ export const UpsertChatMessage = async (
   try {
     const modelToSave: ChatMessageModel = {
       ...chatModel,
-      id: uniqueId(),
-      createdAt: new Date(),
+      id: chatModel.id || uniqueId(), // Usa l'id esistente se c'è
+      createdAt: chatModel.createdAt || new Date(),
       type: MESSAGE_ATTRIBUTE,
       isDeleted: false,
+      tool_calls: chatModel.tool_calls || undefined, // <-- ASSICURATI DI SALVARLO!
     };
 
     const { resource } =

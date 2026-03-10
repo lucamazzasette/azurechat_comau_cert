@@ -18,108 +18,52 @@ export const GetDefaultExtensions = async (props: {
   defaultExtensions.push({
     type: "function",
     function: {
-      function: async (args: any) =>
-        await executeCreateImage(
-          args,
-          props.chatThread.id,
-          props.userMessage,
-          props.signal
-        ),
+      function: async (args: any) => await executeCreateImage(args, props.chatThread.id, props.userMessage, props.signal),
       parse: (input: string) => JSON.parse(input),
-      parameters: {
-        type: "object",
-        properties: {
-          prompt: { type: "string" },
-        },
-      },
-      description:
-        "You must only use this tool if the user asks you to create an image. You must only use this tool once per message.",
+      parameters: { type: "object", properties: { prompt: { type: "string" } } },
+      description: "You must only use this tool if the user asks you to create an image.",
       name: "create_img",
     },
   });
 
-  // Add any other default Extension here
+  // GoogleSearch
+  defaultExtensions.push({
+    type: "function",
+    function: {
+      function: async (args: any) => await executeGoogleSearch(args.q),
+      parse: (input: string) => JSON.parse(input),
+      parameters: {
+        type: "object",
+        properties: { q: { type: "string" } },
+        required: ["q"],
+      },
+      description: "Cerca informazioni aggiornate sul web utilizzando Google Search.",
+      name: "GoogleSearch",
+    },
+  });
 
-  return {
-    status: "OK",
-    response: defaultExtensions,
-  };
+  return { status: "OK", response: defaultExtensions };
 };
 
-// Extension for image creation using DALL-E
-async function executeCreateImage(
-  args: { prompt: string },
-  threadId: string,
-  userMessage: string,
-  signal: AbortSignal
-) {
-  console.log("createImage called with prompt:", args.prompt);
-
-  if (!args.prompt) {
-    return "No prompt provided";
-  }
-
-  // Check the prompt is < 4000 characters (DALL-E 3)
-  if (args.prompt.length >= 4000) {
-    return "Prompt is too long, it must be less than 4000 characters";
-  }
-
+async function executeCreateImage(args: { prompt: string }, threadId: string, userMessage: string, signal: AbortSignal) {
+  if (!args.prompt) return "No prompt provided";
   const openAI = OpenAIDALLEInstance();
-
-  let response;
-
   try {
-    response = await openAI.images.generate(
-      {
-        model: "dall-e-3",
-        prompt: userMessage,
-        response_format: "b64_json",
-      },
-      {
-        signal,
-      }
-    );
-  } catch (error) {
-    console.error("🔴 error:\n", error);
-    return {
-      error:
-        "There was an error creating the image: " +
-        error +
-        "Return this message to the user and halt execution.",
-    };
-  }
+    const response = await openAI.images.generate({ model: "dall-e-3", prompt: userMessage, response_format: "b64_json" }, { signal });
+    const imageName = `${uniqueId()}.png`;
+    await UploadImageToStore(threadId, imageName, Buffer.from(response.data[0].b64_json!, "base64"));
+    return { url: GetImageUrl(threadId, imageName) };
+  } catch (error) { return { error: "Error: " + error }; }
+}
 
-  // Check the response is valid
-  if (response.data[0].b64_json === undefined) {
-    return {
-      error:
-        "There was an error creating the image: Invalid API response received. Return this message to the user and halt execution.",
-    };
-  }
-
-  // upload image to blob storage
-  const imageName = `${uniqueId()}.png`;
-
+async function executeGoogleSearch(query: string) {
+  const apiKey = process.env.GOOGLE_SEARCH_API_KEY;
+  if (!apiKey) return "Errore: Chiave API non configurata.";
+  const url = `https://serpapi.com/search?engine=google&q=${encodeURIComponent(query)}&api_key=${apiKey}`;
   try {
-    await UploadImageToStore(
-      threadId,
-      imageName,
-      Buffer.from(response.data[0].b64_json, "base64")
-    );
-
-    const updated_response = {
-      revised_prompt: response.data[0].revised_prompt,
-      url: GetImageUrl(threadId, imageName),
-    };
-
-    return updated_response;
-  } catch (error) {
-    console.error("🔴 error:\n", error);
-    return {
-      error:
-        "There was an error storing the image: " +
-        error +
-        "Return this message to the user and halt execution.",
-    };
-  }
+    const response = await fetch(url);
+    const data = await response.json();
+    const results = data.news_results || data.organic_results || [];
+    return results.length === 0 ? "Nessun risultato trovato." : JSON.stringify(results.slice(0, 3));
+  } catch (error) { return "Errore ricerca web: " + error; }
 }
