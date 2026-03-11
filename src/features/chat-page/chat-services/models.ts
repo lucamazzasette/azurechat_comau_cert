@@ -16,6 +16,7 @@ export interface ChatMessageModel {
   role: ChatRole;
   name: string;
   multiModalImage?: string;
+  tool_calls?: any; // <--- AGGIUNGI QUESTA RIGA
   type: typeof MESSAGE_ATTRIBUTE;
 }
 
